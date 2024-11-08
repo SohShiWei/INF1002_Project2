@@ -47,24 +47,21 @@ void displayRecords(StudentRecord records[], int count) {
 void showMenu() {
     printf("\n--- Student Records Menu ---\n");
     printf("1. Display All Records\n");
-    printf("2. Exit\n");
+    printf("2. Search\n");
+    printf("3. Update\n");
+    printf("4. Delete\n");
+    printf("5. Exit\n");
 }
 
 int main() {
     StudentRecord records[100];
     int recordCount = 0;
     char choice[10];
-    printf("Database");
-    while (1) {
+    recordCount = readRecords(FILENAME, records, 100);
+    if (recordCount >= 0) {
+        while (1) {
         showMenu();
         scanf("%s", choice);
-        recordCount = readRecords(FILENAME, records, 100);
-        if (recordCount >= 0) {
-            printf("\nRecords loaded successfully!\n");
-        } else {
-            printf("Error reading records.\n");
-        }
-
         if (strcmp(choice, "1") == 0) {
             // Display all records
             if (recordCount > 0) {
@@ -72,14 +69,32 @@ int main() {
             } else {
                 printf("\nNo records to display. Please load records first.\n");
             }
-        } else if (strcmp(choice, "2") == 0) {
+        } 
+        else if (strcmp(choice, "2") == 0) {
+            // Exit the program
+            printf("\nSearch\n");
+        
+        }
+        else if (strcmp(choice, "3") == 0) {
+            // Exit the program
+            printf("\nUpdate\n");
+        
+        }
+        else if (strcmp(choice, "4") == 0) {
+            // Exit the program
+            printf("\nDelete\n");
+        }
+        else if (strcmp(choice, "5") == 0) {
             // Exit the program
             printf("\nExiting the program\n");
             break;
-        } else {
+        }
+        else {
             printf("\nInvalid choice. Please try again.\n");
         }
+        }
+    } else {
+        printf("Error reading records.\n");
     }
-
     return 0;
 }
