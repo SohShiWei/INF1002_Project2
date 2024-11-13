@@ -44,6 +44,34 @@ void displayRecords(StudentRecord records[], int count) {
     }
 }
 
+void deleteRecord(StudentRecord records[], int *count, int id) {
+    // Step 1: Search for the record by ID
+    int index = searchRecord(records, *count, id);
+
+    if (index == -1) {
+        // If no record is found then
+        printf("Record with ID %d not found.\n", id);
+        return;
+    }
+
+    // Step 2: Ask for confirmation to delete
+    char confirmation;
+    printf("Are you sure you want to delete the record with ID %d? (Y/N): ", id);
+    scanf(" %c", &confirmation);  // Notice the space before %c to skip any leftover newline
+
+    if (confirmation == 'Y' || confirmation == 'y') {
+        // Step 3: Delete the record by shifting elements
+        for (int i = index; i < *count - 1; i++) {
+            records[i] = records[i + 1];
+        }
+        (*count)--;  // Decrease the total number of records
+        printf("Record with ID %d deleted successfully.\n", id);
+    } else {
+        // Step 4: If the user cancels the deletion
+        printf("Deletion canceled. No record was deleted.\n");
+    }
+}
+
 void showMenu() {
     printf("\n--- Student Records Menu ---\n");
     printf("1. Display All Records\n");
