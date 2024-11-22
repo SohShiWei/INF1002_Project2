@@ -44,6 +44,25 @@ void displayRecords(StudentRecord records[], int count) {
     }
 }
 
+void updateRecord(StudentRecord records[], int count) {
+    printf("Enter the ID of the record to update: ");
+    int updateId;
+    scanf("%d", &updateId);
+    for (int i = 0; i < count; i++) {
+        if (records[i].id == updateId) { //If ID found, update the record
+            printf("Enter new name: ");
+            scanf("%49s", records[i].name); 
+            printf("Enter new programme: ");
+            scanf("%49s", records[i].programme);
+            printf("Enter new mark: ");
+            scanf("%f", &records[i].mark);
+            printf("Record updated successfully.\n");
+            return; 
+        }
+    }
+    printf("Record with ID %d not found.\n", updateId); //Error message if ID not found
+}
+
 void showMenu() {
     printf("\n--- Student Records Menu ---\n");
     printf("1. Display All Records\n");
@@ -76,9 +95,8 @@ int main() {
         
         }
         else if (strcmp(choice, "3") == 0) {
-            // Exit the program
-            printf("\nUpdate\n");
-        
+            // Update selected record based on ID
+            updateRecord(records, recordCount);
         }
         else if (strcmp(choice, "4") == 0) {
             // Exit the program
