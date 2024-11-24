@@ -4,7 +4,7 @@
 
 #define MAX_NAME_LENGTH 50
 #define MAX_PROGRAMME_LENGTH 50
-#define FILENAME "students.txt"
+#define FILENAME "./students.txt"
 
 typedef struct StudentRecord{
     int id;
@@ -12,6 +12,44 @@ typedef struct StudentRecord{
     char programme[MAX_PROGRAMME_LENGTH];
     float mark;
 } StudentRecord;
+
+int queryRecord(StudentRecord records[], int count, int id) // Function to search for a record by ID
+{
+    for (int i = 0; i < count; i++) {
+        if (records[i].id == id) {
+            return i;
+        }
+    }
+    return -1;
+}
+void queryById(StudentRecord records[], int count) // Function to search for a record by ID
+{
+    int id;
+    printf("\nEnter the student ID to search: ");
+    scanf("%d", &id);
+
+    if (id >= 0) //Checks if the ID is valid
+        {
+        int index = queryRecord(records, count, id); //Calls the queryRecord function to search for the record
+        if (index != -1) {
+            printf("\nThe record with ID=%d is found in the data table.\n", id);
+            printf("%-10s %-15s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
+            printf("---------------------------------------------------------------\n");
+            printf("%-10d %-15s %-25s %.1f\n", records[index].id, records[index].name, records[index].programme, records[index].mark);
+        }
+        else //If the ID does not exist
+        {
+            printf("\nThe record with ID = %d does not exist.\n", id);
+
+        }
+    }
+    else//If the ID is invalid
+    {
+        printf("\nInvalid ID. Please try again.\n");
+        return;
+    }
+
+}
 
 int readRecords(const char *filename, StudentRecord records[], int max_records) {
     FILE *file = fopen(filename, "r");
@@ -52,15 +90,39 @@ void showMenu() {
     printf("4. Delete\n");
     printf("5. Exit\n");
 }
+void Declaration() {
+    printf("\"\n");
+    printf("                                             Declaration                      \n");
+    printf("SIT’s policy on copying does not allow the students to copy source code as well as assessment solutions\nfrom another person or other places. It is the students’ responsibility to guarantee that their assessment\nsolutions are their own work. Meanwhile, the students must also ensure that their work is not accessible\nby others. Where such plagiarism is detected, both of the assessments involved will receive ZERO mark.\n\n");
+
+    printf("We hereby declare that:\n");
+    printf("• We fully understand and agree to the abovementioned plagiarism policy.\n");
+    printf("• We did not copy any code from others or from other places.\n");
+    printf("• We did not share our codes with others or upload to any other places for public access and will\n  not do that in the future.\n");
+    printf("• We agree that our project will receive Zero mark if there is any plagiarism detected.\n");
+    printf("• We agree that we will not disclose any information or material of the group project to others or upload to any other places for public access.\n\n");
+
+    printf("Declared by: P7_7\n");
+    printf("Team members:\n");
+    printf("1. Matthew Chua Xiang Jun\n");
+    printf("2. Pek Jun Teck Keith\n");
+    printf("3. Soh Shi Wei\n");
+    printf("4. Hing Zheng Wen\n");
+    printf("5. Choo Zhi Xuan\n\n");
+    printf("Date: (please insert the date when you submit your group project).\n");
+    printf("\"");
+}
 
 int main() {
     StudentRecord records[100];
+    Declaration();
     int recordCount = 0;
     char choice[10];
     recordCount = readRecords(FILENAME, records, 100);
     if (recordCount >= 0) {
         while (1) {
         showMenu();
+        printf("\nEnter your choice: ");
         scanf("%s", choice);
         if (strcmp(choice, "1") == 0) {
             // Display all records
@@ -71,8 +133,9 @@ int main() {
             }
         } 
         else if (strcmp(choice, "2") == 0) {
-            // Exit the program
-            printf("\nSearch\n");
+            // Search for a record
+            queryById(records, recordCount);
+
         
         }
         else if (strcmp(choice, "3") == 0) {
