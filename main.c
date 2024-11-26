@@ -1,6 +1,8 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #define MAX_NAME_LENGTH 50
 #define MAX_PROGRAMME_LENGTH 50
@@ -12,6 +14,71 @@ typedef struct StudentRecord{
     char programme[MAX_PROGRAMME_LENGTH];
     float mark;
 } StudentRecord;
+
+int InsertRecord(StudentRecord records[], int count){
+    int c; 
+    //Wait for response
+    while ((c = getchar()) != '\n' && c!= EOF);
+    int inputid;
+    char buffer[100];
+    char *endptr;
+    //Retrieve ID of new record
+    printf("Enter the student ID you wish to insert:\n");
+    fgets(buffer,sizeof(buffer),stdin);
+    inputid = atoi(buffer);
+    //Calculate digits to ensure student ID is a valid combination of 7 numbers
+    int digitcount = (int)log10(inputid)+1;
+    if (digitcount < 7){
+        printf("Please enter a valid student ID");
+        return count;
+    }
+    else{
+        //Check if ID already used in records
+        for (int i=0; i < count; i++){
+            if(inputid == records[i].id){
+                printf("student ID already exists!");
+                inputid = 0;
+            }
+        }
+        if (inputid != 0){    
+            char name [50];
+            printf("Enter the name of the student:\n");
+            fgets(name,sizeof(name),stdin);
+            name[strcspn(name, "\n")] = '\0';
+            for(int i = 0; name[i] != '\0'; i++){
+                if(name[i]==' '){
+                    name[i] = '_';
+                }
+            }
+            char programme [50];
+            printf("Enter the programme of the student:\n");
+            fgets(programme,sizeof(programme),stdin);
+            programme[strcspn(programme,"\n")] = '\0';
+            printf("Enter the marks of the studen:\n"); 
+            char markbuffer[100];
+            fgets(markbuffer,sizeof(markbuffer),stdin);
+            float inputFloat = strtof(markbuffer,&endptr);
+            //Check for valid input for Marks
+            if(inputFloat < 0){
+                printf("Enter a valid value for Marks");
+                return count;
+            }
+            else{
+                //Insert into records
+                records[count].id = inputid;
+                strcpy(records[count].name, name);
+                strcpy(records[count].programme, programme);
+                records[count].mark = inputFloat;
+                printf("A new record with ID=%i is successfully inserted.\n",inputid);
+                count = count+1;
+                return count;
+            }
+        }
+        else{
+            return count;
+        }
+    }
+}
 
 int queryRecord(StudentRecord records[], int count, int id) // Function to search for a record by ID
 {
@@ -74,6 +141,7 @@ int readRecords(const char *filename, StudentRecord records[], int max_records) 
     return count;  // Return the number of records successfully read
 }
 
+
 void displayRecords(StudentRecord records[], int count) {
     printf("%-10s %-15s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
     printf("---------------------------------------------------------------\n");
@@ -103,23 +171,45 @@ void updateRecord(StudentRecord records[], int count) {
 
 void showMenu() {
     printf("\n--- Student Records Menu ---\n");
+    printf("0. Open File\n");
     printf("1. Display All Records\n");
-    printf("2. Search\n");
-    printf("3. Update\n");
-    printf("4. Delete\n");
-    printf("5. Exit\n");
+    printf("2. Insert\n");
+    printf("3. Search\n");
+    printf("4. Update\n");
+    printf("5. Delete\n");
+    printf("6. Save\n");
+    printf("7. Exit\n");
 }
+
+int Save(const char *filename, StudentRecord records[], int max_records) {
+    FILE *file = fopen(filename, "w");
+    if (file == NULL) {
+        perror("Unable to open file");
+        return -1;      // Error code for file opening failure
+    }
+    if (ferror(file)) {
+        perror("Error reading file");
+        fclose(file);
+        return -2;  // Error code for file reading failure
+    }
+    for(int i = 0; i<max_records;i++){
+        fprintf(file, "%-10d %-20s %-25s %8.1f\n",records[i].id,records[i].name,records[i].programme,records[i].mark);
+    }
+    printf("The database file is successfully saved");
+    fclose(file);
+}
+
 void Declaration() {
     printf("\"\n");
     printf("                                             Declaration                      \n");
     printf("SIT’s policy on copying does not allow the students to copy source code as well as assessment solutions\nfrom another person or other places. It is the students’ responsibility to guarantee that their assessment\nsolutions are their own work. Meanwhile, the students must also ensure that their work is not accessible\nby others. Where such plagiarism is detected, both of the assessments involved will receive ZERO mark.\n\n");
 
     printf("We hereby declare that:\n");
-    printf("• We fully understand and agree to the abovementioned plagiarism policy.\n");
-    printf("• We did not copy any code from others or from other places.\n");
-    printf("• We did not share our codes with others or upload to any other places for public access and will\n  not do that in the future.\n");
-    printf("• We agree that our project will receive Zero mark if there is any plagiarism detected.\n");
-    printf("• We agree that we will not disclose any information or material of the group project to others or upload to any other places for public access.\n\n");
+    printf("- We fully understand and agree to the abovementioned plagiarism policy.\n");
+    printf("- We did not copy any code from others or from other places.\n");
+    printf("- We did not share our codes with others or upload to any other places for public access and will\n  not do that in the future.\n");
+    printf("- We agree that our project will receive Zero mark if there is any plagiarism detected.\n");
+    printf("- We agree that we will not disclose any information or material of the group project to others or upload to any other places for public access.\n\n");
 
     printf("Declared by: P7_7\n");
     printf("Team members:\n");
@@ -137,35 +227,42 @@ int main() {
     Declaration();
     int recordCount = 0;
     char choice[10];
-    recordCount = readRecords(FILENAME, records, 100);
     if (recordCount >= 0) {
         while (1) {
         showMenu();
-        printf("\nEnter your choice: ");
         scanf("%s", choice);
-        if (strcmp(choice, "1") == 0) {
+        if (strcmp(choice, "0") == 0) {
+            recordCount = readRecords(FILENAME, records, 100);
+        } 
+        else if (strcmp(choice,"1")== 0){
             // Display all records
             if (recordCount > 0) {
                 displayRecords(records, recordCount);
             } else {
                 printf("\nNo records to display. Please load records first.\n");
             }
-        } 
+        }
         else if (strcmp(choice, "2") == 0) {
-            // Search for a record
-            queryById(records, recordCount);
-
-        
+            recordCount = InsertRecord(records,recordCount);
         }
         else if (strcmp(choice, "3") == 0) {
+            // Search for a record
+            queryById(records, recordCount);
+        }
+        else if (strcmp(choice, "4") == 0) {
             // Update selected record based on ID
             updateRecord(records, recordCount);
         }
-        else if (strcmp(choice, "4") == 0) {
-            // Exit the program
+        else if (strcmp(choice, "5") == 0) {
+            // Delete existing records
             printf("\nDelete\n");
         }
-        else if (strcmp(choice, "5") == 0) {
+        else if (strcmp(choice, "6") == 0){
+            // Save to file
+            Save(FILENAME,records,recordCount);
+            printf("\nSave\n");
+        }
+        else if (strcmp(choice, "7") == 0) {
             // Exit the program
             printf("\nExiting the program\n");
             break;

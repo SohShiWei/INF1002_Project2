@@ -1,3 +1,3 @@
-2301234 Joshua_Chen Software_Engineering 70.5
-2201234 Isaac_Teo Computer_Science 63.4
-2304567 John_Levoy Digital_Supply_Chain 85.9
+2301234    Joshua_Chen          Software_Engineering         70.5
+2201234    Isaac_Teo            Computer_Science             63.4
+2304567    John_Levoy           Digital_Supply_Chain         85.9
