@@ -1,4 +1,5 @@
 
+
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -311,8 +312,15 @@ int main() {
         }
         else if (strcmp(choice, "5") == 0) {
             // Delete existing records
-            printf("\nDelete\n");
-        }
+             if (recordCount > 0) {
+                int id;
+                printf("Enter the ID of the record to delete: ");
+                scanf("%d", &id);
+                deleteRecord(records, &recordCount, id);
+            } else {
+                printf("\nNo records available to delete.\n");
+            }
+        } 
         else if (strcmp(choice, "6") == 0){
             // Save to file
             Save(FILENAME,records,recordCount);
