@@ -6,7 +6,7 @@
 
 #define MAX_NAME_LENGTH 50
 #define MAX_PROGRAMME_LENGTH 50
-#define FILENAME "./students.txt"
+#define FILENAME "./P7_7-CMS.txt"
 
 typedef struct StudentRecord{
     int id;
@@ -54,7 +54,7 @@ int InsertRecord(StudentRecord records[], int count){
             printf("Enter the programme of the student:\n");
             fgets(programme,sizeof(programme),stdin);
             programme[strcspn(programme,"\n")] = '\0';
-            printf("Enter the marks of the studen:\n"); 
+            printf("Enter the marks of the student:\n"); 
             char markbuffer[100];
             fgets(markbuffer,sizeof(markbuffer),stdin);
             float inputFloat = strtof(markbuffer,&endptr);
@@ -150,18 +150,62 @@ void displayRecords(StudentRecord records[], int count) {
     }
 }
 
+int isValidStr(char *str) {
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (!isalpha(str[i]) && str[i] != '_' && str[i] != ' ') {
+            return 0; // Return 0 if invalid character found
+        }
+        if (str[i] == ' ') { //Convert space to underscore
+                str[i] = '_';
+            }
+    }
+    return 1; // Return 1 if all characters are valid
+}
+
+int isValidFloat(const char *str) {
+    char *endptr;
+    strtof(str, &endptr); // Convert string to float, store pointer to endptr
+
+    // Check if the entire string was converted, points to null terminator which is at the end of the string
+    // if entire string is converted, points '\0' and return '1' (TRUE)
+    // if not, it points to the char found and not to '\0', and return '0' (FALSE)
+    return *endptr == '\0'; 
+}
+
 void updateRecord(StudentRecord records[], int count) {
-    printf("Enter the ID of the record to update: ");
     int updateId;
+    printf("Enter the ID of the record to update: ");
     scanf("%d", &updateId);
+    getchar(); // Consume newline character, prevents double print for first input
+
     for (int i = 0; i < count; i++) {
-        if (records[i].id == updateId) { //If ID found, update the record
-            printf("Enter new name: ");
-            scanf("%49s", records[i].name); 
-            printf("Enter new programme: ");
-            scanf("%49s", records[i].programme);
-            printf("Enter new mark: ");
-            scanf("%f", &records[i].mark);
+        if (records[i].id == updateId) { //If ID found, proceed to update
+            char buffer[50];
+            float mark;
+
+            do {
+                printf("Enter new name: ");
+                fgets(buffer, sizeof(buffer), stdin); //Read input from user, prevent empty input
+                buffer[strcspn(buffer, "\n")] = '\0'; //Remove newline char
+            } while (strlen(buffer) == 0 || !isValidStr(buffer)); //While input empty OR not valid str
+            strcpy(records[i].name, buffer);
+
+            do {
+                printf("Enter new programme: ");
+                fgets(buffer, sizeof(buffer), stdin); //Read input from user, prevent empty input
+                buffer[strcspn(buffer, "\n")] = '\0'; //Remove newline char
+            } while (strlen(buffer) == 0 || !isValidStr(buffer)); //While input empty OR not valid str
+            strcpy(records[i].programme, buffer);
+
+            do {
+                printf("Enter new mark: ");
+                fgets(buffer, sizeof(buffer), stdin);
+                buffer[strcspn(buffer, "\n")] = '\0'; //Remove newline char
+            } while (strlen(buffer) == 0 || !isValidFloat(buffer) || (mark = strtof(buffer, NULL)) < 0); 
+            //IF isValidFloat = 0, means input has invalid characters, then !isValidFloat = 1(TRUE), then loop will continue
+            //If mark < 0, means input is negative, then mark < 0 = 1(TRUE), then loop will continue
+            records[i].mark = mark;
+
             printf("Record updated successfully.\n");
             return; 
         }
@@ -202,7 +246,7 @@ int Save(const char *filename, StudentRecord records[], int max_records) {
 void Declaration() {
     printf("\"\n");
     printf("                                             Declaration                      \n");
-    printf("SIT’s policy on copying does not allow the students to copy source code as well as assessment solutions\nfrom another person or other places. It is the students’ responsibility to guarantee that their assessment\nsolutions are their own work. Meanwhile, the students must also ensure that their work is not accessible\nby others. Where such plagiarism is detected, both of the assessments involved will receive ZERO mark.\n\n");
+    printf("SIT's policy on copying does not allow the students to copy source code as well as assessment solutions\nfrom another person or other places. It is the students’ responsibility to guarantee that their assessment\nsolutions are their own work. Meanwhile, the students must also ensure that their work is not accessible\nby others. Where such plagiarism is detected, both of the assessments involved will receive ZERO mark.\n\n");
 
     printf("We hereby declare that:\n");
     printf("- We fully understand and agree to the abovementioned plagiarism policy.\n");
