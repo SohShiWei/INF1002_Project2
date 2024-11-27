@@ -1,4 +1,5 @@
 
+#include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -241,6 +242,8 @@ int Save(const char *filename, StudentRecord records[], int max_records) {
     }
     printf("The database file is successfully saved");
     fclose(file);
+
+    return 0;
 }
 
 void Declaration() {
@@ -262,7 +265,7 @@ void Declaration() {
     printf("3. Soh Shi Wei\n");
     printf("4. Hing Zheng Wen\n");
     printf("5. Choo Zhi Xuan\n\n");
-    printf("Date: (please insert the date when you submit your group project).\n");
+    printf("Date: 29 November 2024.\n");
     printf("\"");
 }
 
