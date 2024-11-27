@@ -118,7 +118,16 @@ void queryById(StudentRecord records[], int count) // Function to search for a r
     }
 
 }
-
+// Delete record
+void deleteRecord(StudentRecord records[], int *count, int id) {
+    int index = queryRecord(records, *count, id);
+    if (index != -1) {
+        records[index] = records[--(*count)];
+        printf("Record with ID %d deleted successfully.\n", id);
+    } else {
+        printf("Record not found.\n");
+    }
+}
 int readRecords(const char *filename, StudentRecord records[], int max_records) {
     FILE *file = fopen(filename, "r");
     if (file == NULL) {
