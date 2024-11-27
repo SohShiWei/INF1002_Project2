@@ -161,6 +161,16 @@ void displayRecords(StudentRecord records[], int count) {
     }
 }
 
+int isValidInt(const char *str) {
+    char *endptr;
+    strtol(str, &endptr, 10); // Convert string to long, store pointer to endptr
+
+    // Check if the entire string was converted, points to null terminator which is at the end of the string
+    // if entire string is converted, points '\0' and return '1' (TRUE)
+    // if not, it points to the char found and not to '\0', and return '0' (FALSE)
+    return *endptr == '\0'; 
+}
+
 int isValidStr(char *str) {
     for (int i = 0; str[i] != '\0'; i++) {
         if (!isalpha(str[i]) && str[i] != '_' && str[i] != ' ') {
@@ -185,9 +195,22 @@ int isValidFloat(const char *str) {
 
 void updateRecord(StudentRecord records[], int count) {
     int updateId;
-    printf("Enter the ID of the record to update: ");
-    scanf("%d", &updateId);
-    getchar(); // Consume newline character, prevents double print for first input
+    char idBuffer[100];
+    getchar(); //Clear input buffer
+
+    do {
+        printf("Enter the ID of the record to update: ");
+        fgets(idBuffer, sizeof(idBuffer), stdin);
+        idBuffer[strcspn(idBuffer, "\n")] = '\0'; //Remove newline char
+        if (strlen(idBuffer) == 0) {
+            printf("ID cannot be empty. Please enter a valid ID.\n");
+        } else if (!isValidInt(idBuffer)) {
+            printf("Invalid characters found. Please enter a valid ID.\n");
+        }
+    } while (strlen(idBuffer) == 0 || !isValidInt(idBuffer)); //While input is empty OR not a valid int, repeat
+
+    char *endptr;
+    updateId = strtol(idBuffer, &endptr, 10); // Convert string to long, store pointer to endptr
 
     for (int i = 0; i < count; i++) {
         if (records[i].id == updateId) { //If ID found, proceed to update
@@ -198,6 +221,11 @@ void updateRecord(StudentRecord records[], int count) {
                 printf("Enter new name: ");
                 fgets(buffer, sizeof(buffer), stdin); //Read input from user, prevent empty input
                 buffer[strcspn(buffer, "\n")] = '\0'; //Remove newline char
+                if (strlen(buffer) == 0) {
+                    printf("Name cannot be empty. Please enter a valid name.\n");
+                } else if (!isValidStr(buffer)) {
+                    printf("Invalid characters found. Please enter a valid name.\n");
+                }
             } while (strlen(buffer) == 0 || !isValidStr(buffer)); //While input empty OR not valid str
             strcpy(records[i].name, buffer);
 
@@ -205,6 +233,11 @@ void updateRecord(StudentRecord records[], int count) {
                 printf("Enter new programme: ");
                 fgets(buffer, sizeof(buffer), stdin); //Read input from user, prevent empty input
                 buffer[strcspn(buffer, "\n")] = '\0'; //Remove newline char
+                if (strlen(buffer) == 0) {
+                    printf("Programme cannot be empty. Please enter a valid programme.\n");
+                } else if (!isValidStr(buffer)) {
+                    printf("Invalid characters found. Please enter a valid programme.\n");
+                }
             } while (strlen(buffer) == 0 || !isValidStr(buffer)); //While input empty OR not valid str
             strcpy(records[i].programme, buffer);
 
@@ -212,9 +245,15 @@ void updateRecord(StudentRecord records[], int count) {
                 printf("Enter new mark: ");
                 fgets(buffer, sizeof(buffer), stdin);
                 buffer[strcspn(buffer, "\n")] = '\0'; //Remove newline char
+                if (strlen(buffer) == 0) {
+                    printf("Mark cannot be empty. Please enter a valid mark.\n");
+                } else if (!isValidFloat(buffer)) {
+                    printf("Invalid characters found. Please enter a valid mark.\n");
+                } else if ((mark = strtof(buffer, NULL)) < 0) {
+                    printf("Mark cannot be negative. Please enter a valid mark.\n");
+                }
             } while (strlen(buffer) == 0 || !isValidFloat(buffer) || (mark = strtof(buffer, NULL)) < 0); 
-            //IF isValidFloat = 0, means input has invalid characters, then !isValidFloat = 1(TRUE), then loop will continue
-            //If mark < 0, means input is negative, then mark < 0 = 1(TRUE), then loop will continue
+            //while input empty OR not valid float OR negative value, repeat
             records[i].mark = mark;
 
             printf("Record updated successfully.\n");
