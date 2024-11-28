@@ -95,7 +95,12 @@ void queryById(StudentRecord records[], int count) // Function to search for a r
 {
     int id;
     printf("\nEnter the student ID to search: ");
-    scanf("%d", &id);
+    if (scanf("%d", &id) != 1) {
+        printf("\nInvalid input. Please enter a valid integer ID.\n");
+        // Clear the input buffer
+        while (getchar() != '\n');
+        return;
+    }
 
     if (id >= 0) //Checks if the ID is valid
         {
@@ -273,6 +278,7 @@ void showMenu() {
     printf("5. Delete\n");
     printf("6. Save\n");
     printf("7. Exit\n");
+    printf("\nEnter your choice: ");
 }
 
 int Save(const char *filename, StudentRecord records[], int max_records) {
