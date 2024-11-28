@@ -200,19 +200,23 @@ int isValidFloat(const char *str) {
 
 void updateRecord(StudentRecord records[], int count) {
     int updateId;
-    char idBuffer[100];
+    char idBuffer[50];
     getchar(); //Clear input buffer
 
     do {
         printf("Enter the ID of the record to update: ");
         fgets(idBuffer, sizeof(idBuffer), stdin);
         idBuffer[strcspn(idBuffer, "\n")] = '\0'; //Remove newline char
+        int digitcount = (int)log10(atoi(idBuffer))+1;
         if (strlen(idBuffer) == 0) {
             printf("ID cannot be empty. Please enter a valid ID.\n");
         } else if (!isValidInt(idBuffer)) {
             printf("Invalid characters found. Please enter a valid ID.\n");
+        } else if (digitcount < 7 || digitcount > 7) {
+            printf("Please enter a valid student ID. \n");
         }
-    } while (strlen(idBuffer) == 0 || !isValidInt(idBuffer)); //While input is empty OR not a valid int, repeat
+    } while (strlen(idBuffer) == 0 || !isValidInt(idBuffer) || (int)log10(atoi(idBuffer))+1 < 7 || (int)log10(atoi(idBuffer))+1 > 7); 
+    //While input is empty OR not a valid int OR not valid ID length, repeat
 
     char *endptr;
     updateId = strtol(idBuffer, &endptr, 10); // Convert string to long, store pointer to endptr
@@ -256,9 +260,11 @@ void updateRecord(StudentRecord records[], int count) {
                     printf("Invalid characters found. Please enter a valid mark.\n");
                 } else if ((mark = strtof(buffer, NULL)) < 0) {
                     printf("Mark cannot be negative. Please enter a valid mark.\n");
+                } else if ((mark = strtof(buffer, NULL)) > 100) {
+                    printf("Mark cannot be more than 100. Please enter a valid mark.\n");
                 }
-            } while (strlen(buffer) == 0 || !isValidFloat(buffer) || (mark = strtof(buffer, NULL)) < 0); 
-            //while input empty OR not valid float OR negative value, repeat
+            } while (strlen(buffer) == 0 || !isValidFloat(buffer) || (mark = strtof(buffer, NULL)) < 0 || (mark = strtof(buffer, NULL)) > 100); 
+            //while input empty OR not valid float OR negative value OR more than 100, repeat
             records[i].mark = mark;
 
             printf("Record updated successfully.\n");
