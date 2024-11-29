@@ -275,14 +275,16 @@ void updateRecord(StudentRecord records[], int count) {
             char buffer[50];
             float mark;
             do {
-                printf("Record found. What would you like to update?\n");
                 printf("1. Name\n");
                 printf("2. Programme\n");
                 printf("3. Mark\n");
                 printf("4. All fields\n");
                 printf("5. Exit\n");
                 printf("Enter your choice: ");
-                scanf("%d", &choice);
+                if (scanf("%d", &choice) != 1 || choice < 1 || choice > 5) {
+                    printf("Invalid input. Please enter a valid integer choice.\n");
+                    while ((choice = getchar()) != '\n' && choice != EOF);
+                }
                 if (choice == 1) {
                     do {
                         getchar();
