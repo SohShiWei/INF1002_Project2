@@ -246,50 +246,113 @@ void updateRecord(StudentRecord records[], int count) {
 
     for (int i = 0; i < count; i++) {
         if (records[i].id == updateId) { //If ID found, proceed to update
+            int choice;
             char buffer[50];
             float mark;
-
             do {
-                printf("Enter new name: ");
-                fgets(buffer, sizeof(buffer), stdin); //Read input from user, prevent empty input
-                buffer[strcspn(buffer, "\n")] = '\0'; //Remove newline char
-                if (strlen(buffer) == 0) {
-                    printf("Name cannot be empty. Please enter a valid name.\n");
-                } else if (!isValidStr(buffer)) {
-                    printf("Invalid characters found. Please enter a valid name.\n");
-                }
-            } while (strlen(buffer) == 0 || !isValidStr(buffer)); //While input empty OR not valid str
-            strcpy(records[i].name, buffer);
+                printf("Record found. What would you like to update?\n");
+                printf("1. Name\n");
+                printf("2. Programme\n");
+                printf("3. Mark\n");
+                printf("4. All fields\n");
+                printf("5. Exit\n");
+                printf("Enter your choice: ");
+                scanf("%d", &choice);
+                if (choice == 1) {
+                    do {
+                        getchar();
+                        printf("Enter new name: ");
+                        fgets(buffer, sizeof(buffer), stdin); //Read input from user, prevent empty input
+                        buffer[strcspn(buffer, "\n")] = '\0'; //Remove newline char
+                        if (strlen(buffer) == 0) {
+                            printf("Name cannot be empty. Please enter a valid name.\n");
+                        } else if (!isValidStr(buffer)) {
+                            printf("Invalid characters found. Please enter a valid name.\n");
+                        }
+                    } while (strlen(buffer) == 0 || !isValidStr(buffer)); //While input empty OR not valid str
+                    strcpy(records[i].name, buffer);
 
-            do {
-                printf("Enter new programme: ");
-                fgets(buffer, sizeof(buffer), stdin); //Read input from user, prevent empty input
-                buffer[strcspn(buffer, "\n")] = '\0'; //Remove newline char
-                if (strlen(buffer) == 0) {
-                    printf("Programme cannot be empty. Please enter a valid programme.\n");
-                } else if (!isValidStr(buffer)) {
-                    printf("Invalid characters found. Please enter a valid programme.\n");
-                }
-            } while (strlen(buffer) == 0 || !isValidStr(buffer)); //While input empty OR not valid str
-            strcpy(records[i].programme, buffer);
+                } else if (choice == 2) {
+                    do {
+                        getchar();
+                        printf("Enter new programme: ");
+                        fgets(buffer, sizeof(buffer), stdin); //Read input from user, prevent empty input
+                        buffer[strcspn(buffer, "\n")] = '\0'; //Remove newline char
+                        if (strlen(buffer) == 0) {
+                            printf("Programme cannot be empty. Please enter a valid programme.\n");
+                        } else if (!isValidStr(buffer)) {
+                            printf("Invalid characters found. Please enter a valid programme.\n");
+                        }
+                    } while (strlen(buffer) == 0 || !isValidStr(buffer)); //While input empty OR not valid str
+                    strcpy(records[i].programme, buffer);
 
-            do {
-                printf("Enter new mark: ");
-                fgets(buffer, sizeof(buffer), stdin);
-                buffer[strcspn(buffer, "\n")] = '\0'; //Remove newline char
-                if (strlen(buffer) == 0) {
-                    printf("Mark cannot be empty. Please enter a valid mark.\n");
-                } else if (!isValidFloat(buffer)) {
-                    printf("Invalid characters found. Please enter a valid mark.\n");
-                } else if ((mark = strtof(buffer, NULL)) < 0) {
-                    printf("Mark cannot be negative. Please enter a valid mark.\n");
-                } else if ((mark = strtof(buffer, NULL)) > 100) {
-                    printf("Mark cannot be more than 100. Please enter a valid mark.\n");
-                }
-            } while (strlen(buffer) == 0 || !isValidFloat(buffer) || (mark = strtof(buffer, NULL)) < 0 || (mark = strtof(buffer, NULL)) > 100); 
-            //while input empty OR not valid float OR negative value OR more than 100, repeat
-            records[i].mark = mark;
+                } else if (choice == 3) {
+                    do {
+                        getchar();
+                        printf("Enter new mark: ");
+                        fgets(buffer, sizeof(buffer), stdin);
+                        buffer[strcspn(buffer, "\n")] = '\0'; //Remove newline char
+                        if (strlen(buffer) == 0) {
+                            printf("Mark cannot be empty. Please enter a valid mark.\n");
+                        } else if (!isValidFloat(buffer)) {
+                            printf("Invalid characters found. Please enter a valid mark.\n");
+                        } else if ((mark = strtof(buffer, NULL)) < 0) {
+                            printf("Mark cannot be negative. Please enter a valid mark.\n");
+                        } else if ((mark = strtof(buffer, NULL)) > 100) {
+                            printf("Mark cannot be more than 100. Please enter a valid mark.\n");
+                        }
+                    } while (strlen(buffer) == 0 || !isValidFloat(buffer) || (mark = strtof(buffer, NULL)) < 0 || (mark = strtof(buffer, NULL)) > 100); 
+                    //while input empty OR not valid float OR negative value OR more than 100, repeat
+                    records[i].mark = mark;
 
+                } else if (choice == 4) {
+                    do {
+                        getchar();
+                        printf("Enter new name: ");
+                        fgets(buffer, sizeof(buffer), stdin); //Read input from user, prevent empty input
+                        buffer[strcspn(buffer, "\n")] = '\0'; //Remove newline char
+                        if (strlen(buffer) == 0) {
+                            printf("Name cannot be empty. Please enter a valid name.\n");
+                        } else if (!isValidStr(buffer)) {
+                            printf("Invalid characters found. Please enter a valid name.\n");
+                        }
+                    } while (strlen(buffer) == 0 || !isValidStr(buffer)); //While input empty OR not valid str
+                    strcpy(records[i].name, buffer);
+
+                    do {
+                        printf("Enter new programme: ");
+                        fgets(buffer, sizeof(buffer), stdin); //Read input from user, prevent empty input
+                        buffer[strcspn(buffer, "\n")] = '\0'; //Remove newline char
+                        if (strlen(buffer) == 0) {
+                            printf("Programme cannot be empty. Please enter a valid programme.\n");
+                        } else if (!isValidStr(buffer)) {
+                            printf("Invalid characters found. Please enter a valid programme.\n");
+                        }
+                    } while (strlen(buffer) == 0 || !isValidStr(buffer)); //While input empty OR not valid str
+                    strcpy(records[i].programme, buffer);
+
+                    do {
+                        printf("Enter new mark: ");
+                        fgets(buffer, sizeof(buffer), stdin);
+                        buffer[strcspn(buffer, "\n")] = '\0'; //Remove newline char
+                        if (strlen(buffer) == 0) {
+                            printf("Mark cannot be empty. Please enter a valid mark.\n");
+                        } else if (!isValidFloat(buffer)) {
+                            printf("Invalid characters found. Please enter a valid mark.\n");
+                        } else if ((mark = strtof(buffer, NULL)) < 0) {
+                            printf("Mark cannot be negative. Please enter a valid mark.\n");
+                        } else if ((mark = strtof(buffer, NULL)) > 100) {
+                            printf("Mark cannot be more than 100. Please enter a valid mark.\n");
+                        }
+                    } while (strlen(buffer) == 0 || !isValidFloat(buffer) || (mark = strtof(buffer, NULL)) < 0 || (mark = strtof(buffer, NULL)) > 100); 
+                    //while input empty OR not valid float OR negative value OR more than 100, repeat
+                    records[i].mark = mark;
+
+                } else if (choice == 5) {
+                    return;
+                } 
+            } while (choice < 1 || choice > 5);
+            
             printf("Record updated successfully.\n");
             return; 
         }
