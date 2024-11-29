@@ -74,17 +74,26 @@ int InsertRecord(StudentRecord records[], int count){
                     return count; // Return 0 if non-alphabetic character is found
                 }
             }
-            if (strlen(name) == 0) {
+            if (strlen(programme) == 0) {
                 printf("Programme cannot be empty. Please enter a valid programme.\n");
                 return count;
             } 
             printf("Enter the marks of the student:\n"); 
             char markbuffer[100];
             fgets(markbuffer,sizeof(markbuffer),stdin);
+            markbuffer[strcspn(markbuffer, "\n")] = '\0';
+            // Check if input is valid
+            if (markbuffer[0] == '\0'){
+                printf("Invalid marks");
+                return count;
+            }
             float inputFloat = strtof(markbuffer,&endptr);
             //Check for valid input for Marks
             if(inputFloat < 0){
                 printf("Marks cannot be negative, Please enter a valid value for Marks");
+                return count;
+            }else if (inputFloat > 100){
+                printf("Marks cannot be more than 100, Please enter a valid value for Marks");
                 return count;
             }
             else{
@@ -403,7 +412,7 @@ int Save(const char *filename, StudentRecord records[], int max_records) {
     for(int i = 0; i<max_records;i++){
         fprintf(file, "%-10d %-20s %-25s %8.1f\n",records[i].id,records[i].name,records[i].programme,records[i].mark);
     }
-    printf("The database file is successfully saved");
+    printf("The database %s is successfully saved",FILENAME);
     fclose(file);
 
     return 0;
