@@ -148,7 +148,7 @@ void queryById(StudentRecord records[], int count) // Function to search for a r
         return;
     }
 
-    if (id >= 0) //Checks if the ID is valid
+    if (id >= 1000000 && id <= 9999999) // Checks if the ID is exactly 7 digits //Checks if the ID is valid
         {
         int index = queryRecord(records, count, id); //Calls the queryRecord function to search for the record
         if (index != -1) {
