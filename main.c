@@ -30,7 +30,7 @@ int InsertRecord(StudentRecord records[], int count){
     inputid = atoi(buffer);
     //Calculate digits to ensure student ID is a valid combination of 7 numbers
     int digitcount = (int)log10(inputid)+1;
-    if (digitcount < 7){
+    if (digitcount < 7 || digitcount > 7){
         printf("Please enter a valid student ID");
         return count;
     }
@@ -371,7 +371,12 @@ int main() {
             }
         }
         else if (strcmp(choice, "2") == 0) {
-            recordCount = InsertRecord(records,recordCount);
+            
+            if (recordCount > 0) {
+                recordCount = InsertRecord(records,recordCount);
+            } else {
+                printf("\nNo records available. Please load records first.\n");
+            }
         }
         else if (strcmp(choice, "3") == 0) {
             // Search for a record
