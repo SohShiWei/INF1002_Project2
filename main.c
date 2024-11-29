@@ -511,8 +511,16 @@ int main() {
         }
         else if (strcmp(choice, "7") == 0) {
             // Exit the program
-            printf("\nExiting the program\n");
-            break;
+            char saveorno[2];
+            printf("Do you wish to save before you exit? (Y/N)");
+            scanf("%s",saveorno);
+            if(strcmp(saveorno, "Y") == 0){
+                Save(FILENAME,records,recordCount);
+            }
+            else if(strcmp(saveorno, "N") == 0) {
+                printf("Exiting... \n");
+                break;
+            }
         }
         else {
             printf("\nInvalid choice. Please try again.\n");
