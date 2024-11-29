@@ -137,7 +137,7 @@ void queryById(StudentRecord records[], int count) // Function to search for a r
         {
         int index = queryRecord(records, count, id); //Calls the queryRecord function to search for the record
         if (index != -1) {
-            printf("\nThe record with ID=%d is found in the data table.\n", id);
+            printf("\nThe record with ID=%d is found in the data table.\n\n", id);
             printf("%-10s %-15s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
             printf("---------------------------------------------------------------\n");
             printf("%-10d %-15s %-25s %.1f\n", records[index].id, records[index].name, records[index].programme, records[index].mark);
