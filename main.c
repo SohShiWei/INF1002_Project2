@@ -74,17 +74,26 @@ int InsertRecord(StudentRecord records[], int count){
                     return count; // Return 0 if non-alphabetic character is found
                 }
             }
-            if (strlen(name) == 0) {
+            if (strlen(programme) == 0) {
                 printf("Programme cannot be empty. Please enter a valid programme.\n");
                 return count;
             } 
             printf("Enter the marks of the student:\n"); 
             char markbuffer[100];
             fgets(markbuffer,sizeof(markbuffer),stdin);
+            markbuffer[strcspn(markbuffer, "\n")] = '\0';
+            // Check if input is valid
+            if (markbuffer[0] == '\0'){
+                printf("Invalid marks");
+                return count;
+            }
             float inputFloat = strtof(markbuffer,&endptr);
             //Check for valid input for Marks
             if(inputFloat < 0){
                 printf("Marks cannot be negative, Please enter a valid value for Marks");
+                return count;
+            }else if (inputFloat > 100){
+                printf("Marks cannot be more than 100, Please enter a valid value for Marks");
                 return count;
             }
             else{
@@ -128,7 +137,7 @@ void queryById(StudentRecord records[], int count) // Function to search for a r
         {
         int index = queryRecord(records, count, id); //Calls the queryRecord function to search for the record
         if (index != -1) {
-            printf("\nThe record with ID=%d is found in the data table.\n", id);
+            printf("\nThe record with ID=%d is found in the data table.\n\n", id);
             printf("%-10s %-15s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
             printf("---------------------------------------------------------------\n");
             printf("%-10d %-15s %-25s %.1f\n", records[index].id, records[index].name, records[index].programme, records[index].mark);
@@ -150,20 +159,37 @@ void queryById(StudentRecord records[], int count) // Function to search for a r
 void deleteRecord(StudentRecord records[], int *count, int id) {
     int index = queryRecord(records, *count, id);
     if (index != -1) {
-        records[index] = records[--(*count)];
-        printf("Record with ID %d deleted successfully.\n", id);
+        char confirmation;
+        printf("Are you sure you want to delete the record with ID %d? (y/n): ", id);
+        // Wait for the user to enter 'y' or 'n'
+        while (1) {
+            scanf(" %c", &confirmation);  // Adding a space before %c to skip any leftover newline characters
+            if (confirmation == 'y' || confirmation == 'Y') {
+                // Proceed to delete the record
+                records[index] = records[--(*count)];  // Replace the record with the last record and reduce count
+                printf("Record with ID %d deleted successfully.\n", id);
+                return;
+            } else if (confirmation == 'n' || confirmation == 'N') {
+                printf("Record deletion canceled.\n");
+                return;
+            } else {
+                printf("Invalid input. Please enter 'y' for yes or 'n' for no: ");
+            }
+        }
     } else {
-        printf("Record not found.\n");
+        printf("Record with ID %d not found.\n", id);
     }
 }
 int readRecords(const char *filename, StudentRecord records[], int max_records) {
     FILE *file = fopen(filename, "r");
+
     if (file == NULL) {
         perror("Unable to open file");
         return -1;      // Error code for file opening failure
     }
 
     int count = 0;
+    printf("Opened File: %s\n", FILENAME);
     while (count < max_records && fscanf(file, "%d %49s %49s %f", 
             &records[count].id, records[count].name, records[count].programme, &records[count].mark) == 4) {
         count++;
@@ -386,7 +412,7 @@ int Save(const char *filename, StudentRecord records[], int max_records) {
     for(int i = 0; i<max_records;i++){
         fprintf(file, "%-10d %-20s %-25s %8.1f\n",records[i].id,records[i].name,records[i].programme,records[i].mark);
     }
-    printf("The database file is successfully saved");
+    printf("The database %s is successfully saved",FILENAME);
     fclose(file);
 
     return 0;
