@@ -136,39 +136,50 @@ int queryRecord(StudentRecord records[], int count, int id) // Function to searc
     }
     return -1;
 }
-void queryById(StudentRecord records[], int count) // Function to search for a record by ID
-{
-    int id;
-    printf("\nEnter the student ID to search: ");
+void queryById(StudentRecord records[], int count) {
+    char buffer[50];
+    int id, c;
+    while ((c = getchar()) != '\n' && c != EOF); // Clear input buffer
 
-    if (scanf("%d", &id) != 1 || id < 0) {
-        printf("\nInvalid input. Please enter a valid integer ID.\n");
-        while (getchar() != '\n'); // Clear the input buffer
+    printf("\nEnter the student ID to search: ");
+    fgets(buffer, sizeof(buffer), stdin); // Read input into buffer
+
+    // Validate that the input contains only digits
+    int isValid = 1;
+    for (int i = 0; buffer[i] != '\n' && buffer[i] != '\0'; i++) {
+        if (!isdigit(buffer[i])) {
+            isValid = 0;
+            break;
+        }
+    }
+
+    if (!isValid) {
+        printf("\nInvalid input. Please enter only numeric digits.\n");
         return;
     }
 
-    if (id >= 1000000 && id <= 9999999) // Checks if the ID is exactly 7 digits //Checks if the ID is valid
-        {
-        int index = queryRecord(records, count, id); //Calls the queryRecord function to search for the record
+    // Convert buffer to integer
+    id = atoi(buffer);
+
+    // Check if the ID is exactly 7 digits
+    if (id >= 1000000 && id <= 9999999) {
+        int index = queryRecord(records, count, id);
         if (index != -1) {
             printf("\nThe record with ID=%d is found in the data table.\n\n", id);
             printf("%-10s %-15s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
             printf("---------------------------------------------------------------\n");
             printf("%-10d %-15s %-25s %.1f\n", records[index].id, records[index].name, records[index].programme, records[index].mark);
-        }
-        else //If the ID does not exist
-        {
+        } else {
             printf("\nThe record with ID = %d does not exist.\n", id);
-
         }
+    } else {
+        printf("\nInvalid ID. Please enter a 7-digit ID.\n");
     }
-    else//If the ID is invalid
-    {
-        printf("\nInvalid ID. Please try again.\n");
-        return;
-    }
-
 }
+
+
+
+
 // Delete record
 void deleteRecord(StudentRecord records[], int *count, int id) {
     int index = queryRecord(records, *count, id);
