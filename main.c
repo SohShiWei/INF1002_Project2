@@ -148,10 +148,25 @@ void queryById(StudentRecord records[], int count) // Function to search for a r
 void deleteRecord(StudentRecord records[], int *count, int id) {
     int index = queryRecord(records, *count, id);
     if (index != -1) {
-        records[index] = records[--(*count)];
-        printf("Record with ID %d deleted successfully.\n", id);
+        char confirmation;
+        printf("Are you sure you want to delete the record with ID %d? (y/n): ", id);
+        // Wait for the user to enter 'y' or 'n'
+        while (1) {
+            scanf(" %c", &confirmation);  // Adding a space before %c to skip any leftover newline characters
+            if (confirmation == 'y' || confirmation == 'Y') {
+                // Proceed to delete the record
+                records[index] = records[--(*count)];  // Replace the record with the last record and reduce count
+                printf("Record with ID %d deleted successfully.\n", id);
+                return;
+            } else if (confirmation == 'n' || confirmation == 'N') {
+                printf("Record deletion canceled.\n");
+                return;
+            } else {
+                printf("Invalid input. Please enter 'y' for yes or 'n' for no: ");
+            }
+        }
     } else {
-        printf("Record not found.\n");
+        printf("Record with ID %d not found.\n", id);
     }
 }
 int readRecords(const char *filename, StudentRecord records[], int max_records) {
