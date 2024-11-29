@@ -29,9 +29,23 @@ int InsertRecord(StudentRecord records[], int count){
     //Retrieve ID of new record
     printf("Enter the student ID you wish to insert:\n");
     fgets(buffer,sizeof(buffer),stdin);
+    int isValid = 1;
+    for (int i = 0; buffer[i] != '\n' && buffer[i] != '\0'; i++) {
+        if (!isdigit(buffer[i])) {
+            isValid = 0;
+            break;
+        }
+    }
+
+    if (!isValid) {
+        printf("Invalid input: Please enter only numeric digits.\n");
+        return count;
+    }
+    int len = strlen(buffer);
     inputid = atoi(buffer);
     //Calculate digits to ensure student ID is a valid combination of 7 numbers
     int digitcount = (int)log10(inputid)+1;
+    if(digitcount)
     if (digitcount < 7 || digitcount > 7){
         printf("Please enter a valid student ID");
         return count;
@@ -49,6 +63,7 @@ int InsertRecord(StudentRecord records[], int count){
             printf("Enter the name of the student:\n");
             fgets(name,sizeof(name),stdin);
             name[strcspn(name, "\n")] = '\0';
+            
             for (int i = 0; name[i] != '\0'; i++) {
                 if (!isalpha(name[i]) && name[i] != ' ') { // Allow alphabetic characters and spaces
                     printf("Name can only include alphabets. Please enter a valid name.\n");
@@ -127,9 +142,9 @@ void queryById(StudentRecord records[], int count) // Function to search for a r
     int id;
     printf("\nEnter the student ID to search: ");
 
-    if (scanf("%d", &id) != 1) {
+    if (scanf("%d", &id) != 1 || id < 0) {
         printf("\nInvalid input. Please enter a valid integer ID.\n");
-        while ((id = getchar()) != '\n' && id != EOF);
+        while (getchar() != '\n'); // Clear the input buffer
         return;
     }
 
