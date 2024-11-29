@@ -173,12 +173,14 @@ void deleteRecord(StudentRecord records[], int *count, int id) {
 }
 int readRecords(const char *filename, StudentRecord records[], int max_records) {
     FILE *file = fopen(filename, "r");
+
     if (file == NULL) {
         perror("Unable to open file");
         return -1;      // Error code for file opening failure
     }
 
     int count = 0;
+    printf("Opened File: %s\n", FILENAME);
     while (count < max_records && fscanf(file, "%d %49s %49s %f", 
             &records[count].id, records[count].name, records[count].programme, &records[count].mark) == 4) {
         count++;
