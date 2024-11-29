@@ -142,9 +142,9 @@ void queryById(StudentRecord records[], int count) // Function to search for a r
     int id;
     printf("\nEnter the student ID to search: ");
 
-    if (scanf("%d", &id) != 1) {
+    if (scanf("%d", &id) != 1 || id < 0) {
         printf("\nInvalid input. Please enter a valid integer ID.\n");
-        while ((id = getchar()) != '\n' && id != EOF);
+        while (getchar() != '\n'); // Clear the input buffer
         return;
     }
 
@@ -152,7 +152,7 @@ void queryById(StudentRecord records[], int count) // Function to search for a r
         {
         int index = queryRecord(records, count, id); //Calls the queryRecord function to search for the record
         if (index != -1) {
-            printf("\nThe record with ID=%d is found in the data table.\n", id);
+            printf("\nThe record with ID=%d is found in the data table.\n\n", id);
             printf("%-10s %-15s %-25s %-5s\n", "ID", "Name", "Programme", "Mark");
             printf("---------------------------------------------------------------\n");
             printf("%-10d %-15s %-25s %.1f\n", records[index].id, records[index].name, records[index].programme, records[index].mark);
@@ -197,12 +197,14 @@ void deleteRecord(StudentRecord records[], int *count, int id) {
 }
 int readRecords(const char *filename, StudentRecord records[], int max_records) {
     FILE *file = fopen(filename, "r");
+
     if (file == NULL) {
         perror("Unable to open file");
         return -1;      // Error code for file opening failure
     }
 
     int count = 0;
+    printf("Opened File: %s\n", FILENAME);
     while (count < max_records && fscanf(file, "%d %49s %49s %f", 
             &records[count].id, records[count].name, records[count].programme, &records[count].mark) == 4) {
         count++;
