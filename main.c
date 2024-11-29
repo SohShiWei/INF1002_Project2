@@ -16,6 +16,7 @@ typedef struct StudentRecord{
     char programme[MAX_PROGRAMME_LENGTH];
     float mark;
 } StudentRecord;
+
 int isValidInt(const char *str);
 
 int InsertRecord(StudentRecord records[], int count){
@@ -116,14 +117,12 @@ void queryById(StudentRecord records[], int count) // Function to search for a r
 {
     int id;
     printf("\nEnter the student ID to search: ");
-    char idBuffer[50];
-    fgets(idBuffer, sizeof(idBuffer), stdin);
-    idBuffer[strcspn(idBuffer, "\n")] = '\0'; // Remove newline character
-    if (!isValidInt(idBuffer)) {
+
+    if (scanf("%d", &id) != 1) {
         printf("\nInvalid input. Please enter a valid integer ID.\n");
+        while ((id = getchar()) != '\n' && id != EOF);
         return;
     }
-    id = atoi(idBuffer);
 
     if (id >= 0) //Checks if the ID is valid
         {
