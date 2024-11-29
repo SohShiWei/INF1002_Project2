@@ -127,9 +127,9 @@ void queryById(StudentRecord records[], int count) // Function to search for a r
     int id;
     printf("\nEnter the student ID to search: ");
 
-    if (scanf("%d", &id) != 1) {
+    if (scanf("%d", &id) != 1 || id < 0) {
         printf("\nInvalid input. Please enter a valid integer ID.\n");
-        while ((id = getchar()) != '\n' && id != EOF);
+        while (getchar() != '\n'); // Clear the input buffer
         return;
     }
 
