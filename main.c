@@ -47,6 +47,16 @@ int InsertRecord(StudentRecord records[], int count){
             printf("Enter the name of the student:\n");
             fgets(name,sizeof(name),stdin);
             name[strcspn(name, "\n")] = '\0';
+            for (int i = 0; name[i] != '\0'; i++) {
+                if (!isalpha(name[i]) && name[i] != ' ') { // Allow alphabetic characters and spaces
+                    printf("Name can only include alphabets. Please enter a valid name.\n");
+                    return count; // Return 0 if non-alphabetic character is found
+                }
+            }
+            if (strlen(name) == 0) {
+                printf("Name cannot be empty. Please enter a valid name.\n");
+                return count;
+            } 
             for(int i = 0; name[i] != '\0'; i++){
                 if(name[i]==' '){
                     name[i] = '_';
@@ -56,13 +66,23 @@ int InsertRecord(StudentRecord records[], int count){
             printf("Enter the programme of the student:\n");
             fgets(programme,sizeof(programme),stdin);
             programme[strcspn(programme,"\n")] = '\0';
+            for (int i = 0; programme[i] != '\0'; i++) {
+                if (!isalpha(programme[i]) && programme[i] != ' ') { // Allow alphabetic characters and spaces
+                    printf("Programme can only include alphabets. Please enter a valid programme.\n");
+                    return count; // Return 0 if non-alphabetic character is found
+                }
+            }
+            if (strlen(name) == 0) {
+                printf("Programme cannot be empty. Please enter a valid programme.\n");
+                return count;
+            } 
             printf("Enter the marks of the student:\n"); 
             char markbuffer[100];
             fgets(markbuffer,sizeof(markbuffer),stdin);
             float inputFloat = strtof(markbuffer,&endptr);
             //Check for valid input for Marks
             if(inputFloat < 0){
-                printf("Enter a valid value for Marks");
+                printf("Marks cannot be negative, Please enter a valid value for Marks");
                 return count;
             }
             else{
